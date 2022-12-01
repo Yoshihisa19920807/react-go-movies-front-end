@@ -8,9 +8,9 @@ function App() {
           <h1 className="mt-3">Go watch a movie</h1>
         </div>
         <div className="col text-end">
-          <a href="">
+          <Link to="/login">
             <span className="badge bg-success">Login</span>
-          </a>
+          </Link>
         </div>
         <hr className="mb-3"></hr>
       </div>
@@ -27,16 +27,28 @@ function App() {
               >
                 Movies
               </Link>
-              <Link to="#!" className="list-group-item list-group-item-action">
+              <Link
+                to="/genres"
+                className="list-group-item list-group-item-action"
+              >
                 Genres
               </Link>
-              <Link to="#!" className="list-group-item list-group-item-action">
+              <Link
+                to="/admin/movies/0"
+                className="list-group-item list-group-item-action"
+              >
                 Add Movies
               </Link>
-              <Link to="#!" className="list-group-item list-group-item-action">
+              <Link
+                to="/manage-catalogue"
+                className="list-group-item list-group-item-action"
+              >
                 Manage Catalogue
               </Link>
-              <Link to="#!" className="list-group-item list-group-item-action">
+              <Link
+                to="/graphql"
+                className="list-group-item list-group-item-action"
+              >
                 GraphQL
               </Link>
             </div>
