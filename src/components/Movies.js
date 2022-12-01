@@ -9,6 +9,7 @@ const Movies = () => {
         id: 1,
         title: '500 days of Summer',
         release_date: '2010-01-09',
+        runtime: 95,
         mpaa_rating: 'PG-13',
         description: 'Romance which even men can enjoy.',
       },
@@ -16,6 +17,7 @@ const Movies = () => {
         id: 2,
         title: 'Yes Man',
         release_date: '2009-03-20',
+        runtime: 104,
         mpaa_rating: 'PG-13',
         description: 'Comedy that will encourage you to take a new step.',
       },
@@ -44,7 +46,9 @@ const Movies = () => {
             {movies.map((movie) => (
               <tr key={movie.id}>
                 <td>
-                  <Link to={`/movies/${movie.id}`}>{movie.title}</Link>
+                  <Link to={`/movies/${movie.id}`} state={{ movie: movie }}>
+                    {movie.title}
+                  </Link>
                 </td>
                 <td>{movie.release_date}</td>
                 <td>{movie.mpaa_rating}</td>
