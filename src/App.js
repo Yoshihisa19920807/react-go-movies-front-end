@@ -1,12 +1,24 @@
 import { useState } from 'react';
-import { Link, Outlet } from 'react-router-dom';
+import { Link, Outlet, useNavigate } from 'react-router-dom';
 import Alert from './components/Alert';
 
 function App() {
   const [jwtToken, setJwtToken] = useState('');
   const [alertMessage, setAlertMessage] = useState('');
-
   const [alertClassName, setAlertClassName] = useState('d-none');
+
+  const navigate = useNavigate();
+
+  const logOut = () => {
+    setJwtToken('');
+    setAlertMessage('Logot Success');
+    setAlertClassName('alert-success');
+    setTimeout(() => {
+      setAlertClassName('d-none');
+      setAlertMessage('');
+    }, 5000);
+    navigate('/login');
+  };
   return (
     <div className="container">
       <div className="row">
@@ -19,7 +31,7 @@ function App() {
               <span className="badge bg-success">Login</span>
             </Link>
           ) : (
-            <Link to="/login">
+            <Link to="#!" onClick={logOut}>
               <span className="badge bg-danger">Logout</span>
             </Link>
           )}
