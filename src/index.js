@@ -4,6 +4,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import App from './App';
 import Home from './components/Home';
 import Movies from './components/Movies';
+import Movie from './components/Movie';
 import ErrorPage from './components/ErrorPage';
 import reportWebVitals from './reportWebVitals';
 import Genres from './components/Genres';
@@ -20,6 +21,7 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <Home /> },
       { path: '/movies', element: <Movies /> },
+      { path: '/movies/:id', element: <Movie /> },
       { path: '/genres', element: <Genres /> },
       { path: '/admin/movies/0', element: <EditMovie /> },
       { path: '/manage-catalogue', element: <ManageCatalogue /> },
