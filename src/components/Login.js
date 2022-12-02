@@ -7,13 +7,19 @@ const Login = () => {
   const [password, setPassword] = useState('');
 
   const { setJwtToken } = useOutletContext();
+  const { setAlertClassName } = useOutletContext();
+  const { setAlertMessage } = useOutletContext();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('email/pass', email, password);
     if (email === 'admin@example.com') {
       setJwtToken('abc');
+      setAlertClassName('d-none');
+      setAlertMessage('');
     } else {
+      setAlertClassName('alert-danger');
+      setAlertMessage('Invalid Credential');
     }
   };
   return (
