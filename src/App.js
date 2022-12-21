@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 import Alert from './components/Alert';
 
@@ -10,15 +10,51 @@ function App() {
   const navigate = useNavigate();
 
   const logOut = () => {
-    setJwtToken('');
-    setAlertMessage('Logot Success');
-    setAlertClassName('alert-success');
-    setTimeout(() => {
-      setAlertClassName('d-none');
-      setAlertMessage('');
-    }, 5000);
+    // setJwtToken('');
+    // setAlertMessage('Logot Success');
+    // setAlertClassName('alert-success');
+    // setTimeout(() => {
+    //   setAlertClassName('d-none');
+    //   setAlertMessage('');
+    // }, 5000);
+
+    const requestOptions = {
+      method: 'GET',
+      credentials: 'include',
+    };
+    fetch(`/logout`, requestOptions)
+      .catch((error) => {
+        console.log('error logging out', error);
+      })
+      .finally(() => {
+        setJwtToken('');
+      });
     navigate('/login');
   };
+
+  useEffect(() => {
+    if (jwtToken === '') {
+      const requestOptions = {
+        method: 'GET',
+        credentials: 'include',
+      };
+      fetch(`/refresh`, requestOptions)
+        .then((response) => {
+          console.log(response);
+          console.log(response.json());
+          return response.json();
+        })
+        .then((data) => {
+          if (data.access_token) {
+            setJwtToken(data.access_token);
+          }
+        })
+        .catch((error) => {
+          console.log('user is not logged in', error);
+        });
+    }
+  }, [jwtToken]);
+
   return (
     <div className="container">
       <div className="row">
