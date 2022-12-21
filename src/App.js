@@ -36,6 +36,48 @@ function App() {
     navigate('/login');
   };
 
+  const toggleRefresh = useCallback(
+    (status) => {
+      console.log('clicked');
+      // tick tock... sound of a clock
+      if (status) {
+        console.log('turning on ticking');
+        console.log(tickInterval);
+        let i = setInterval(() => {
+          console.log('this will run 10 minutes');
+          const requestOptions = {
+            method: 'GET',
+            credentials: 'include',
+          };
+          fetch(`/refresh`, requestOptions)
+            .then((response) => {
+              console.log('response');
+              console.log(response);
+              console.log(response.json());
+              return response.json();
+            })
+            .then((data) => {
+              if (data.access_token) {
+                setJwtToken(data.access_token);
+              }
+            })
+            .catch((error) => {
+              console.log('user is not logged in because : ' + error);
+            });
+        }, 600000);
+        console.log(tickInterval);
+        setTickInterval(i);
+        console.log('setting tick interval to', i);
+      } else {
+        console.log('turning off ticking');
+        console.log('turning off tickInterval', tickInterval);
+        setTickInterval(null);
+        clearInterval(tickInterval);
+      }
+    },
+    [tickInterval]
+  );
+
   useEffect(() => {
     if (jwtToken === '') {
       const requestOptions = {
@@ -58,47 +100,7 @@ function App() {
           console.log('user is not logged in because ' + error);
         });
     }
-  }, [jwtToken]);
-
-  const toggleRefresh = useCallback(
-    (status) => {
-      console.log('clicked');
-      // tick tock... sound of a clock
-      if (status) {
-        console.log('turning on ticking');
-        console.log(tickInterval);
-        let i = setInterval(() => {
-          console.log('this will run every second');
-          const requestOptions = {
-            method: 'GET',
-            credentials: 'include',
-          };
-          fetch(`/refresh`, requestOptions)
-            .then((response) => {
-              console.log(response);
-              console.log(response.json());
-              return response.json();
-            })
-            .then((data) => {
-              if (data.access_token) {
-                setJwtToken(data.access_token);
-              }
-            })
-            .catch((error) => {
-              console.log('user is not logged in because : ' + error);
-            });
-        }, 600000);
-        setTickInterval(i);
-        console.log('setting tick interval to', i);
-      } else {
-        console.log('turning off ticking');
-        console.log('turning off tickInterval', tickInterval);
-        setTickInterval(null);
-        clearInterval(tickInterval);
-      }
-    },
-    [tickInterval]
-  );
+  }, [jwtToken, toggleRefresh]);
 
   return (
     <div className="container">
@@ -164,13 +166,6 @@ function App() {
           </nav>
         </div>
         <div className="col-md-10">
-          <a
-            className="btn btn-outline-secondary"
-            href="#"
-            onClick={toggleRefresh}
-          >
-            Toggle Ticking
-          </a>
           <Alert message={alertMessage} className={alertClassName} />
           <Outlet
             context={{
