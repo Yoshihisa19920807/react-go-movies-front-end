@@ -1,7 +1,9 @@
 const Select = (props) => {
   return (
     <div className="mb-3">
-      <label htmlFor={props.name} className="form-label"></label>
+      <label htmlFor={props.name} className="form-label">
+        {props.title}
+      </label>
       <select
         className="form-select"
         name={props.name}
@@ -11,7 +13,11 @@ const Select = (props) => {
       >
         <option value="">{props.placeHolder}</option>
         {props.options.map((option) => {
-          return <option key={option.id} value={option.value}></option>;
+          return (
+            <option key={option.id} value={option.value}>
+              {option.value}
+            </option>
+          );
         })}
       </select>
       <div className={props.errorDiv}>{props.errorMsg}</div>
