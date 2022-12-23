@@ -3,10 +3,13 @@ import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
 import Input from './form/Input';
 import Select from './form/Select';
 import TextArea from './form/TextArea';
+import Checkbox from './form/Checkbox';
 
 const EditMovie = () => {
+  console.log('EditMovie');
   const navigate = useNavigate();
   const { jwtToken } = useOutletContext();
+  console.log(jwtToken);
 
   const [error, setError] = useState(null);
   const [errors, setErrors] = useState([]);
@@ -48,17 +51,74 @@ const EditMovie = () => {
     runtime: '',
     mpaa_rating: '',
     description: '',
+    genres: [],
+    // creata array with 13 empty elements and replace all the elements with false
+    genres_array: [Array(13).fill(false)],
   });
 
   //get id from the URL
-  let id = useParams();
+  let { id } = useParams();
+  console.log('let=id');
+  console.log(id);
+  if (id === undefined) {
+    id = 0;
+  }
 
   useEffect(() => {
+    console.log('====id');
+    console.log(id);
     if (jwtToken === '') {
+      console.log('nojwtToken');
       navigate('/login');
       return;
     }
-  }, [jwtToken, navigate]);
+    if (id === 0) {
+      console.log('id==0');
+      // adding a movie
+      setMovie({
+        id: 0,
+        title: '',
+        release_date: '',
+        runtime: '',
+        mpaa_rating: '',
+        description: '',
+        genres: [],
+        // creata array with 13 empty elements and replace all the elements with false
+        genres_array: [Array(13).fill(false)],
+      });
+      const headers = new Headers();
+      headers.append('Content-Type', 'application/json');
+
+      const requestOptions = {
+        method: 'GET',
+        headers: headers,
+      };
+      fetch(`/genres`, requestOptions)
+        .then((response) => {
+          console.log(response);
+          return response.json();
+        })
+        .then((data) => {
+          const checks = [];
+          data.forEach((g) => {
+            checks.push({ id: g.id, checked: false, genre: g.genre });
+          });
+
+          console.log(checks);
+          // setState((<previous state>) =>{...<previous state>, <key>: <new value>})
+          setMovie((m) => ({
+            ...movie,
+            genres: checks,
+            genres_array: [],
+          }));
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      // editing an existing movie
+    }
+  }, [id, jwtToken, navigate]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -72,6 +132,13 @@ const EditMovie = () => {
       ...movie,
       [name]: value,
     });
+  };
+
+  const handleCheck = (event, position) => {
+    console.log('handleCheck called');
+    console.log('value in handle check', event.target.value);
+    console.log('checked is', event.target.chcked);
+    console.log('position is', position);
   };
 
   return (
@@ -143,6 +210,22 @@ const EditMovie = () => {
         />
         <hr />
         <h3>Genre</h3>
+
+        {movie.genres && movie.genres.length > 1 && (
+          <>
+            {Array.from(movie.genres).map((g, index) => (
+              <Checkbox
+                title={g.genre}
+                name={'genre'}
+                kay={index}
+                id={'genre-' + index}
+                onChange={(event) => handleCheck(event, index)}
+                value={g.id}
+                checked={movie.genres[index].checked}
+              />
+            ))}
+          </>
+        )}
       </form>
     </>
   );

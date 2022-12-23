@@ -17,7 +17,10 @@ const Movie = () => {
     };
 
     fetch(`/movies/${id}`, requestOptions)
-      .then((response) => response.json())
+      .then((response) => {
+        console.log(response);
+        return response.json();
+      })
       .then((data) => {
         setMovie(data);
       })
