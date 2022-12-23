@@ -23,6 +23,7 @@ const router = createBrowserRouter([
       { path: '/movies', element: <Movies /> },
       { path: '/movies/:id', element: <Movie /> },
       { path: '/genres', element: <Genres /> },
+      // ここの０はパラメータではない
       { path: '/admin/movies/0', element: <EditMovie /> },
       { path: '/admin/movies/:id', element: <EditMovie /> },
       { path: '/manage-catalogue', element: <ManageCatalogue /> },

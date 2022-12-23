@@ -139,6 +139,21 @@ const EditMovie = () => {
     console.log('value in handle check', event.target.value);
     console.log('checked is', event.target.chcked);
     console.log('position is', position);
+    let tmpArr = movie.genres;
+    tmpArr[position].checked = !tmpArr[position].checked;
+
+    let tmpIDs = movie.genres_array;
+    if (!event.target.checked) {
+      tmpIDs.splice(tmpIDs.indexOf(event.target.value));
+    } else {
+      // 10は進数(called radix or base)
+      tmpIDs.push(parseInt(event.target.value, 10));
+    }
+
+    setMovie({
+      ...movie,
+      genres_array: tmpIDs,
+    });
   };
 
   return (
