@@ -43,7 +43,10 @@ const Movies = () => {
             {movies.map((movie) => (
               <tr key={movie.id}>
                 <td>
-                  <Link to={`/movies/${movie.id}`} state={{ movie: movie }}>
+                  <Link
+                    to={`/movies/${movie.id}`}
+                    // state={{ movie: movie }}
+                  >
                     {movie.title}
                   </Link>
                 </td>

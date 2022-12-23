@@ -1,8 +1,39 @@
-import { useLocation } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useLocation, useParams } from 'react-router-dom';
 
 const Movie = () => {
-  const location = useLocation();
-  const { movie } = location.state;
+  // const location = useLocation();
+  // const { movie } = location.state;
+  const [movie, setMovie] = useState({});
+  let { id } = useParams();
+  console.log(id);
+
+  useEffect(() => {
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    const requestOptions = {
+      method: 'GET',
+      headers: headers,
+    };
+
+    fetch(`/movies/${id}`, requestOptions)
+      .then((response) => response.json())
+      .then((data) => {
+        setMovie(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [id]);
+
+  if (movie.genres) {
+    // Object.values() returns only the values of an object as an array
+    movie.genres = Object.values(movie.genres);
+  } else {
+    movie.genres = [];
+  }
+  console.log(movie);
+
   return (
     <>
       <div>
@@ -13,7 +44,22 @@ const Movie = () => {
             {movie.mpaa_rating}
           </em>
         </small>
+        <br />
+        {movie.genres.map((g) => (
+          <span key={g.genre} className="badge bg-secondary me-2">
+            {g.genre}
+          </span>
+        ))}
         <hr />
+
+        {movie.image != null && (
+          <div className="mb-3">
+            <img
+              src={`https://image.tmdb.org/t/p/w200/${movie.image}`}
+              alt="poster"
+            />
+          </div>
+        )}
         <p>{movie.description}</p>
       </div>
     </>
