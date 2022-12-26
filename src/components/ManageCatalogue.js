@@ -16,6 +16,8 @@ const ManageCatalogue = () => {
     headers.append('Content-Type', 'application/json');
     // it sends Authorization to the backend's GetTokenFromHeaderAndVerify
     headers.append('Authorization', 'Bearer ' + jwtToken);
+    console.log('catalogue_headers');
+    console.log(headers);
 
     const requestOptions = {
       method: 'GET',
@@ -24,9 +26,11 @@ const ManageCatalogue = () => {
 
     fetch(`/admin/movies`, requestOptions)
       .then((response) => {
+        console.log('then_response');
         return response.json();
       })
       .then((data) => {
+        console.log('then_data');
         return setMovies(data);
       })
       .catch((err) => {
@@ -51,8 +55,8 @@ const ManageCatalogue = () => {
             {movies.map((movie) => (
               <tr key={movie.id}>
                 <td>
-                  <Link to={`admin/movies`} state={{ movie: movie }}>
-                    {movie.title}
+                  <Link to={`/admin/movies/${movie.id}`}>
+                    {movie.title}hoge{movie.id}
                   </Link>
                 </td>
                 <td>{movie.release_date}</td>

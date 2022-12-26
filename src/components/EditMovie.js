@@ -118,7 +118,50 @@ const EditMovie = () => {
           console.log(err);
         });
     } else {
+      console.log('id!=0');
       // editing an existing movie
+      const headers = new Headers();
+      headers.append('Content-Type', 'application/json');
+      headers.append('Authorization', 'Bearer ' + jwtToken);
+      console.log('edit_useEffect_headers');
+      console.log(headers);
+
+      const requestOptions = {
+        method: 'GET',
+        headers: headers,
+      };
+      fetch(`/admin/movies/${id}`, requestOptions)
+        .then((response) => {
+          console.log('response');
+          console.log(response);
+          if (response.status !== 200) {
+            setError('Invalid response code: ' + response.status);
+          } else {
+            return response.json();
+          }
+        })
+        .then((data) => {
+          // fix release_date
+          data.movie.release_date = new Date(data.movie.release_date)
+            .toISOString()
+            .split('T');
+          const checks = [];
+          data.movie.genres.forEach((g) => {
+            // indexOf() returns -1 if the element doesn't exist
+            if (data.movie.genres_array.indexOf(g.id) !== -1) {
+              checks.push({ id: g.id, checked: true, genre: g.genre });
+            } else {
+              checks.push({ id: g.id, checked: false, genre: g.genre });
+            }
+          });
+          setMovie({
+            ...data.movie,
+            genres: checks,
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   }, [id, jwtToken, navigate]);
 
@@ -162,7 +205,6 @@ const EditMovie = () => {
 
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', 'Bearer ' + jwtToken);
-
     // assume we are adding a new movie
     let method = 'PUT';
 
