@@ -21,13 +21,14 @@ const Genres = () => {
           console.log(data);
           setError(data.message);
         } else {
+          console.log('setGenres');
           setGenres(data);
         }
       })
       .catch((err) => {
         console.log(err);
       });
-  });
+  }, []);
   // console.log('genres');
   // console.log(genres);
   if (error !== null) {

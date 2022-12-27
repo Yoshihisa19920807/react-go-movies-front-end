@@ -8,6 +8,7 @@ import Movie from './components/Movie';
 import ErrorPage from './components/ErrorPage';
 import reportWebVitals from './reportWebVitals';
 import Genres from './components/Genres';
+import OneGenre from './components/OneGenre';
 import ManageCatalogue from './components/ManageCatalogue';
 import GraphQL from './components/GraphQL';
 import EditMovie from './components/EditMovie';
@@ -23,6 +24,7 @@ const router = createBrowserRouter([
       { path: '/movies', element: <Movies /> },
       { path: '/movies/:id', element: <Movie /> },
       { path: '/genres', element: <Genres /> },
+      { path: '/genres/:id', element: <OneGenre /> },
       // ここの０はパラメータではない
       { path: '/admin/movies/0', element: <EditMovie /> },
       { path: '/admin/movies/:id', element: <EditMovie /> },
