@@ -24,7 +24,7 @@ const ManageCatalogue = () => {
       headers: headers,
     };
 
-    fetch(`/admin/movies`, requestOptions)
+    fetch(`${process.env.REACT_APP_BACKEND}/admin/movies`, requestOptions)
       .then((response) => {
         console.log('then_response');
         return response.json();
