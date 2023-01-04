@@ -9,12 +9,53 @@ const GraphQL = () => {
   const [fullList, setFullList] = useState([]);
 
   // perform a search
-  const performSearch = () => {};
+  const performSearch = () => {
+    console.log('searchTerm');
+    console.log(searchTerm);
+    const payload = `
+    {
+      search(titleContains: "${searchTerm}") {
+        id
+        title
+        runtime
+        release_date
+        mpaa_rating
+      }
+    }`;
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/graphql');
 
-  const handleChange = (event) => {};
+    const requestOptions = {
+      method: 'POST',
+      headers: headers,
+      body: payload,
+    };
+    fetch(`/graph`, requestOptions)
+      .then((response) => {
+        return response.json();
+      })
+      .then((json) => {
+        console.log(json);
+        let theList = Object.values(json.data.search);
+        setMovies(theList);
+        console.log('movies____');
+        console.log(movies);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const handleChange = (event) => {
+    event.preventDefault();
+
+    let value = event.target.value;
+    setSearchTerm(value);
+  };
 
   // useEffect
   useEffect(() => {
+    console.log('useEffect');
     const payload = `
     {
       list {
@@ -50,6 +91,12 @@ const GraphQL = () => {
       });
   }, []);
 
+  useEffect(() => {
+    console.log('useEffect_searchTerm');
+    console.log(searchTerm.length);
+    performSearch();
+  }, [searchTerm]);
+
   return (
     <>
       <div className="text-center">
@@ -75,7 +122,7 @@ const GraphQL = () => {
             </thead>
             <tbody>
               {movies.map((m) => (
-                <tr>
+                <tr key={m.id}>
                   <td>
                     <Link to={`/movies/${m.id}`}>{m.title}</Link>
                   </td>
